@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beaconscope"
+version = "0.2.0"
+description = "A network traffic analysis tool for detecting potentially suspicious beaconing behavior"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "numpy>=1.24,<3",
+    "scapy>=2.5,<3"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "hypothesis>=6,<7"]
+
+[project.scripts]
+beaconscope = "beaconscope.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra"

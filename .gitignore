@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+
+# Captures and logs
+*.pcap
+*.pcapng
+*.log
+*.cap
+
+# Generated evaluation results
+eval/results/**/*.csv
+eval/results/**/*.json
+eval/results/**/*.png
+eval/results/**/*.html
+
+# Build artifacts
+build/
+dist/
+
+# IDE
+.vscode/
+.idea/
+.hypothesis/
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
