@@ -95,4 +95,4 @@ docker run --rm -v "${PWD}:/pcaps:ro" -v "${PWD}/results:/results" beaconscope `
 
 See [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md). In brief: benign scheduled traffic can be periodic; destination fan-in can suppress shared C2 infrastructure; the synthetic corpus is small and self-generated; DNS features are not scored; and no public held-out capture or RITA comparison has been completed. TLS/DoH payloads are not decrypted. BeaconScope is intended for offline analyst triage.
 
-The repository's `LICENSE` file is empty. Choose the project's reuse terms before publishing it; no license has been inferred as part of this implementation.
+
