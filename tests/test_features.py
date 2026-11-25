@@ -69,6 +69,17 @@ def test_small_samples_do_not_claim_timing_regularity():
     assert "low confidence" in score_channel(extract_features([100.0, 130.0])).explanation
 
 
+def test_three_regular_observations_cannot_trigger_an_alert():
+    features = extract_features([100.0, 110.0, 120.0], [500.0, 500.0, 500.0])
+    scored = score_channel(features)
+
+    assert scored.score == pytest.approx(0.545)
+    assert scored.timing_supported
+    assert not scored.is_alert(0.5)
+    assert not scored.is_alert(0.0)
+    assert "at least 6 are required for alerts" in scored.explanation
+
+
 def test_missing_observation_becomes_a_longer_interval():
     features = extract_features([0, 10, 20, 50, 60, 70], [400] * 6)
     assert features.n_connections == 6
@@ -146,7 +157,7 @@ def test_pcap_explicit_internal_network_filter(tmp_path):
 
 def test_pcap_ipv6_source_channel(tmp_path):
     pcap = tmp_path / "ipv6.pcap"
-    packet = Ether() / IPv6(src="fd00::5", dst="2001:db8::53") / UDP(sport=53000, dport=53) / Raw(load=b"x")
+    packet = Ether(src="02:00:00:00:00:01", dst="02:00:00:00:00:02") / IPv6(src="fd00::5", dst="2001:db8::53") / UDP(sport=53000, dport=53) / Raw(load=b"x")
     packet.time = 1.0
     wrpcap(str(pcap), [packet])
     channels = extract_channels(pcap)
