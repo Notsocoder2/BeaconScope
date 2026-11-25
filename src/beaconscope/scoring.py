@@ -17,6 +17,7 @@ DEFAULT_WEIGHTS: dict[str, float] = {
     "min_connections_bonus": 0.10,
 }
 MIN_CONNECTIONS_FOR_CONFIDENCE = 6
+MIN_CONNECTIONS_FOR_ALERT = MIN_CONNECTIONS_FOR_CONFIDENCE
 
 
 @dataclass(frozen=True)
@@ -29,7 +30,8 @@ class ScoredChannel:
     def is_alert(self, threshold: float = 0.5) -> bool:
         if not 0.0 <= threshold <= 1.0:
             raise ValueError("threshold must be between 0 and 1")
-        return self.score >= threshold and self.timing_supported
+        enough_observations = self.features.n_connections >= MIN_CONNECTIONS_FOR_ALERT
+        return self.score >= threshold and self.timing_supported and enough_observations
 
 
 def _validated_weights(weights: Mapping[str, float] | None) -> dict[str, float]:
@@ -92,7 +94,10 @@ def score_channel(
     if features.persistence_score > 0.6:
         reasons.append("activity persists across the observation window")
     if features.n_connections < MIN_CONNECTIONS_FOR_CONFIDENCE:
-        reasons.append(f"low confidence: only {features.n_connections} events observed")
+        reasons.append(
+            f"low confidence: only {features.n_connections} events observed; "
+            f"at least {MIN_CONNECTIONS_FOR_ALERT} are required for alerts"
+        )
     if not timing_supported:
         reasons.append("no timing corroboration; size and persistence alone do not meet the beacon gate")
     if not reasons:
